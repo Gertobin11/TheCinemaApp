@@ -1,0 +1,7 @@
+com\mycompany\thecinemaapp\AuthServiceTest.class
+com\mycompany\thecinemaapp\RegisteredUserTest.class
+com\mycompany\thecinemaapp\SessionTest.class
+com\mycompany\thecinemaapp\UserTest.class
+com\mycompany\thecinemaapp\AuthControllerTest.class
+com\mycompany\thecinemaapp\LoginCredentialsTest.class
+com\mycompany\thecinemaapp\PasswordTest.class

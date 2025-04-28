@@ -1,0 +1,9 @@
+com\mycompany\thecinemaapp\TheCinemaApp.class
+com\mycompany\thecinemaapp\User.class
+com\mycompany\thecinemaapp\LoginCredentials.class
+com\mycompany\thecinemaapp\Password.class
+com\mycompany\thecinemaapp\UserRole.class
+com\mycompany\thecinemaapp\AuthController.class
+com\mycompany\thecinemaapp\Session.class
+com\mycompany\thecinemaapp\AuthService.class
+com\mycompany\thecinemaapp\RegisteredUser.class
