@@ -49,7 +49,9 @@ public class RegisteredUser extends User {
         userDetails.put("isLoggedIn", this.isLoggedIn);
         userDetails.put("userRole", this.userRole);
         userDetails.put("loginCredentials", this.loginCredentials.getCredentials());
-        userDetails.put("session", this.session.getSessionInfo());
+        if (session != null) {
+            userDetails.put("session", this.session.getSessionInfo());
+        }
         return userDetails;
     }
     

@@ -4,8 +4,8 @@
  */
 package com.mycompany.thecinemaapp;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.time.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author gerto
  */
-public class PasswordTest {
+public class SessionTest {
     
-    public PasswordTest() {
+    public SessionTest() {
     }
     
     @BeforeAll
@@ -39,18 +39,21 @@ public class PasswordTest {
     }
 
     /**
-     * Test of getCredentials method, of class Password.
+     * Test of getSessionInfo method, of class Session.
      */
     @Test
-    public void testGetCredentials() {
-        System.out.println("getCredentials");
-        Password password = new Password("test credentials", "test password");
-        Map<String, Object> expResult = new HashMap<>();
-        expResult.put("credentialID", "test credentials");
-        expResult.put("password", "test password");
+    public void testGetSessionInfo() {
+        System.out.println("getSessionInfo");
+        LocalDateTime expectedExpiry = LocalDateTime.of(2025, 04, 28, 10, 00);
+        Session session = new Session(expectedExpiry);
+       
+        assertEquals(3, session.getSessionInfo().size());
         
-        Map<String, Object> result = password.getCredentials();
-        assertEquals(expResult, result);
+        assertEquals(expectedExpiry, session.getSessionInfo().get("expiresAt"));
+        assertTrue(session.getSessionInfo().get("createdAt") instanceof LocalDateTime);
+        assertTrue(session.getSessionInfo().get("sessionID") instanceof String);
+        String sessionID = (String) session.getSessionInfo().get("sessionID");
+        assertTrue(sessionID.length() == 36);
     }
     
 }

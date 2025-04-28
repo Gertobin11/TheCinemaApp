@@ -42,13 +42,20 @@ public class AuthControllerTest {
     @Test
     public void testLogin() {
         System.out.println("login");
-        String email = "";
-        String password = "";
-        Boolean rememeberMe = null;
-        AuthController instance = new AuthController();
-        instance.login(email, password, rememeberMe);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        String email = "test@test.com";
+        UserRole userRole = UserRole.USER;
+        String password = "test password";
+        AuthController authController = new AuthController();
+        authController.registerUser(email, password, userRole);
+
+        Boolean rememberMe = true;
+        Boolean result = authController.login(email, password, rememberMe);
+        assertTrue(result);
+        
+       result = authController.login(email, "Bad password", rememberMe);
+       assertFalse(result);
+        
     }
 
     /**
@@ -57,14 +64,40 @@ public class AuthControllerTest {
     @Test
     public void testValidateLogin() {
         System.out.println("validateLogin");
-        String email = "";
-        String password = "";
-        AuthController instance = new AuthController();
-        Boolean expResult = null;
-        Boolean result = instance.validateLogin(email, password);
+        String email = "bad email";
+        String password = "good password";
+        AuthController authController = new AuthController();
+        Boolean expResult = false;
+        Boolean result = authController.validateLogin(email, password);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        email = "test@test.com";
+        password = "f";
+        expResult = false;
+        result = authController.validateLogin(email, password);
+        assertEquals(expResult, result);
+
+        
+        email = "test@test.com";
+        password = "this is a good password";
+        expResult = true;
+        result = authController.validateLogin(email, password);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of registerUser method, of class AuthController.
+     */
+    @Test
+    public void testRegisterUser() {
+        System.out.println("registerUser");
+        String email = "test@test.com";
+        String password = "test password";
+        UserRole role = UserRole.USER;
+        AuthController authController = new AuthController();
+        Boolean expResult = true;
+        Boolean result = authController.registerUser(email, password, role);
+        assertEquals(expResult, result);
     }
     
 }

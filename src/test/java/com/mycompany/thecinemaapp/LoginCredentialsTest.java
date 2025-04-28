@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author gerto
  */
-public class PasswordTest {
+public class LoginCredentialsTest {
     
-    public PasswordTest() {
+    public LoginCredentialsTest() {
     }
     
     @BeforeAll
@@ -39,17 +39,29 @@ public class PasswordTest {
     }
 
     /**
-     * Test of getCredentials method, of class Password.
+     * Test of getCredentialID method, of class LoginCredentials.
+     */
+    @Test
+    public void testGetCredentialID() {
+        System.out.println("getCredentialID");
+        LoginCredentials loginCredentials = new LoginCredentials("test credentials");
+        String expResult = "test credentials";
+        String result = loginCredentials.getCredentialID();
+        assertEquals(expResult, result);
+
+    }
+
+    /**
+     * Test of getCredentials method, of class LoginCredentials.
      */
     @Test
     public void testGetCredentials() {
         System.out.println("getCredentials");
-        Password password = new Password("test credentials", "test password");
+        LoginCredentials loginCredentials = new LoginCredentials("test credentials");
         Map<String, Object> expResult = new HashMap<>();
         expResult.put("credentialID", "test credentials");
-        expResult.put("password", "test password");
         
-        Map<String, Object> result = password.getCredentials();
+        Map<String, Object> result = loginCredentials.getCredentials();
         assertEquals(expResult, result);
     }
     

@@ -6,6 +6,7 @@ package com.mycompany.thecinemaapp;
 
 import java.util.ArrayList;
 import java.time.*;
+import java.util.Map;
 
 /**
  *
@@ -21,42 +22,41 @@ public class AuthService {
 
     public void createSession(String email, LocalDateTime createdAt, Boolean rememberMe) {
         RegisteredUser user = getUserByEmail(email);
-          LocalDateTime expiresAt = LocalDateTime.now();
+        LocalDateTime expiresAt = LocalDateTime.now();
         if (rememberMe) {
             expiresAt = expiresAt.plusMonths(3);
-        }
-        else {
+        } else {
             expiresAt = expiresAt.plusWeeks(1);
         }
         Session session = new Session(expiresAt);
         user.setSession(session);
- 
+
         user.setSession(session);
     }
 
     public Boolean validateCredentials(RegisteredUser user, String password) {
         Object loginCredentialObject = user.getUserDetails().get("loginCredentials");
-        if (loginCredentialObject instanceof LoginCredentials loginCredentials) {
-            Object passwordObject = loginCredentials.getCredentials().get("password");
-            if (passwordObject instanceof String savedPassword) {
-                if (savedPassword.equals(password)) {
+        if (loginCredentialObject instanceof Map map ){
+            Object storedPassword = map.get("password");
+            if (storedPassword instanceof String stringPassword) {
+                if (stringPassword.equals(password)) {
                     return true;
                 }
             }
         }
         return false;
     }
-    
+
     public RegisteredUser getUserByEmail(String email) {
         for (RegisteredUser user : users) {
             String userEmail = getUserEmail(user);
-            if (userEmail.equalsIgnoreCase(userEmail)) {
+            if (userEmail.equalsIgnoreCase(email)) {
                 return user;
             }
         }
         return null;
     }
-    
+
     public void setLoggedInStatus(String email, Boolean status) {
         RegisteredUser user = getUserByEmail(email);
         user.setIsLoggedIn(status);
@@ -72,13 +72,20 @@ public class AuthService {
         }
 
     }
-    
+
     public UserRole getUserRole(String email) {
         RegisteredUser user = getUserByEmail(email);
         Object userRoleObject = user.getUserDetails().get("userRole");
         if (userRoleObject instanceof UserRole userRole) {
             return userRole;
+        } else {
+            return null;
         }
-        else return null;
+    }
+
+    public void createRegisteredUser(String email, UserRole userRole, String password) {
+        Password loginCredentials = new Password(email, password);
+        RegisteredUser user = new RegisteredUser(email, userRole, loginCredentials);
+        users.add(user);
     }
 }

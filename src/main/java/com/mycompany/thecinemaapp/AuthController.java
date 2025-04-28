@@ -18,17 +18,23 @@ public class AuthController {
         
     }
     
-    public void login(String email, String password, Boolean rememeberMe) {
+    public Boolean registerUser(String email, String password, UserRole role) {
+        authService.createRegisteredUser(email, role, password);
+        return true;
+    }
+    
+    public Boolean login(String email, String password, Boolean rememeberMe) {
         RegisteredUser user = authService.getUserByEmail(email);
         if (authService.validateCredentials(user, password)){
             authService.createSession(email, LocalDateTime.MAX, rememeberMe);
             authService.setLoggedInStatus(email, rememeberMe);
             UserRole userRole = authService.getUserRole(email);
             System.out.println("You have successfully logged in");
-            // will then redirect depending on the userrole returned on the ui
+            return true;
         }
         else {
             System.out.println("Login unsuccessful");
+            return false;
         }
     }
     
@@ -37,7 +43,7 @@ public class AuthController {
             System.out.println("Email must be at least 5 characters long");
             return false;
         }
-        if(!email.contains(("@"))) {
+        if(!email.contains("@")) {
             System.out.println("Email must contain an @ character");
             return false;
         }

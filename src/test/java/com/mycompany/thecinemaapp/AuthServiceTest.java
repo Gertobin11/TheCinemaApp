@@ -43,13 +43,24 @@ public class AuthServiceTest {
     @Test
     public void testCreateSession() {
         System.out.println("createSession");
-        String email = "";
-        LocalDateTime createdAt = null;
-        Boolean rememberMe = null;
-        AuthService instance = new AuthService();
-        instance.createSession(email, createdAt, rememberMe);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String email = "test@test.com";
+        UserRole userRole = UserRole.USER;
+        String password = "test password";
+        AuthService authService = new AuthService();
+        authService.createRegisteredUser(email, userRole, password);
+        
+        RegisteredUser user = authService.getUserByEmail(email);
+        
+        assertNull(user.getUserDetails().get("session"));
+        
+        
+        LocalDateTime createdAt = LocalDateTime.now();
+        Boolean rememberMe = false;
+        authService.createSession(email, createdAt, rememberMe);
+        
+        assertNotNull(user.getUserDetails().get("session"));
+        
+        
     }
 
     /**
@@ -58,14 +69,18 @@ public class AuthServiceTest {
     @Test
     public void testValidateCredentials() {
         System.out.println("validateCredentials");
-        RegisteredUser user = null;
-        String password = "";
-        AuthService instance = new AuthService();
-        Boolean expResult = null;
-        Boolean result = instance.validateCredentials(user, password);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String email = "test@test.com";
+        UserRole userRole = UserRole.USER;
+        String password = "test password";
+        AuthService authService = new AuthService();
+        authService.createRegisteredUser(email, userRole, password);
+        
+        RegisteredUser user = authService.getUserByEmail(email);
+        Boolean result = authService.validateCredentials(user, password);
+        assertTrue(result);
+        
+        result = authService.validateCredentials(user, "bad password");
+        assertFalse(result);
     }
 
     /**
@@ -74,13 +89,22 @@ public class AuthServiceTest {
     @Test
     public void testGetUserByEmail() {
         System.out.println("getUserByEmail");
-        String email = "";
-        AuthService instance = new AuthService();
-        RegisteredUser expResult = null;
-        RegisteredUser result = instance.getUserByEmail(email);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String email = "test@test.com";
+        UserRole userRole = UserRole.USER;
+        String password = "test password";
+        AuthService authService = new AuthService();
+        authService.createRegisteredUser(email, userRole, password);
+        
+        RegisteredUser user = authService.getUserByEmail(email);
+        
+        assertNotNull(user);
+        assertTrue(user instanceof RegisteredUser);
+        
+        assertEquals(user.getUserDetails().get("email"), email);
+        
+        user = authService.getUserByEmail("bad EMAIL");
+        
+        assertNull(user);
     }
 
     /**
@@ -89,12 +113,23 @@ public class AuthServiceTest {
     @Test
     public void testSetLoggedInStatus() {
         System.out.println("setLoggedInStatus");
-        String email = "";
-        Boolean status = null;
-        AuthService instance = new AuthService();
-        instance.setLoggedInStatus(email, status);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String email = "test@test.com";
+        UserRole userRole = UserRole.USER;
+        String password = "test password";
+        AuthService authService = new AuthService();
+        authService.createRegisteredUser(email, userRole, password);
+        Boolean status = false;
+        
+        RegisteredUser user = authService.getUserByEmail(email);
+        authService.setLoggedInStatus(email, status);
+        
+        assertEquals(user.getUserDetails().get("isLoggedIn"), false);
+        
+        
+        status = true;
+        authService.setLoggedInStatus(email, status);
+        
+         assertEquals(user.getUserDetails().get("isLoggedIn"), true);
     }
 
     /**
@@ -103,12 +138,17 @@ public class AuthServiceTest {
     @Test
     public void testGetUserEmail() {
         System.out.println("getUserEmail");
-        RegisteredUser user = null;
-        String expResult = "";
+         String email = "test@test.com";
+        UserRole userRole = UserRole.USER;
+        String password = "test password";
+        AuthService authService = new AuthService();
+        authService.createRegisteredUser(email, userRole, password);
+        
+        RegisteredUser user = authService.getUserByEmail(email);
+        
+        String expResult = "test@test.com";
         String result = AuthService.getUserEmail(user);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -117,13 +157,34 @@ public class AuthServiceTest {
     @Test
     public void testGetUserRole() {
         System.out.println("getUserRole");
-        String email = "";
-        AuthService instance = new AuthService();
-        UserRole expResult = null;
-        UserRole result = instance.getUserRole(email);
+         String email = "test@test.com";
+        UserRole userRole = UserRole.USER;
+        String password = "test password";
+        AuthService authService = new AuthService();
+        authService.createRegisteredUser(email, userRole, password);
+
+        UserRole expResult = UserRole.USER;
+        UserRole result = authService.getUserRole(email);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of createRegisteredUser method, of class AuthService.
+     */
+    @Test
+    public void testCreateRegisteredUser() {
+        System.out.println("createRegisteredUser");
+        String email = "test@test.com";
+        UserRole userRole = UserRole.USER;
+        String password = "test password";
+        AuthService authService = new AuthService();
+        authService.createRegisteredUser(email, userRole, password);
+        
+        RegisteredUser user = authService.getUserByEmail(email);
+        
+        assertNotNull(user);
+        
+        assertEquals(user.getUserDetails().get("email"), "test@test.com");
     }
     
 }
